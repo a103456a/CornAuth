@@ -1,8 +1,12 @@
 version: '2'
 
 services:
+  mongo:
+    image: mongo
   cornauth:
     image: cornauth
     build:
       context: ./CornAuth
       dockerfile: Dockerfile
+    depends_on:
+      - mongo
