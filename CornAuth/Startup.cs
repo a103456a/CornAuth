@@ -33,7 +33,8 @@ namespace CornAuth
             services.AddCors();
 
             // 將 MongoDB 新增為服務
-            services.AddSingleton(typeof(IMongoClient), new MongoClient("mongodb://mongo"));
+            var connectionString = Configuration.GetSection("Database").GetSection("MongoDB").GetValue<string>("ConnectionString", null);
+            services.AddSingleton(typeof(IMongoClient), new MongoClient(connectionString));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

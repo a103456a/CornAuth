@@ -16,6 +16,11 @@ namespace CornAuth.Controllers
             this.MongoDB = MongoDB;
         }                     
         [HttpGet("")]
+        public async Task<string[]> Status()
+        {
+            return MongoDB.Cluster.Description.Servers.Select(server => server.EndPoint.ToString()).ToArray();                                   
+        }
+
         [HttpGet("databases")]
         public async Task<List<string>> Get()
         {
