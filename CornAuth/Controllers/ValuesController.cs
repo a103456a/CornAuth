@@ -3,42 +3,31 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using MongoDB.Driver;
 
 namespace CornAuth.Controllers
 {
-    [Route("api/[controller]")]
-    public class ValuesController : Controller
+    [Route("api/mongo")]
+    public class MongoController : Controller
     {
-        // GET api/values
-        [HttpGet]
-        public IEnumerable<string> Get()
+        IMongoClient MongoDB;
+        public MongoController(IMongoClient MongoDB)
         {
-            return new string[] { "value1", "value2" };
-        }
+            this.MongoDB = MongoDB;
+        }                     
+        [HttpGet("")]
+        [HttpGet("databases")]
+        public async Task<IActionResult> Get()
+        {
+            var databases = await MongoDB.ListDatabasesAsync();
+            var names = new List<string>();
+            
+            while (await databases.MoveNextAsync())
+            {                   
+                names.AddRange(databases.Current.Select(document => document.GetElement("name").Value.AsString));
+            }
 
-        // GET api/values/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST api/values
-        [HttpPost]
-        public void Post([FromBody]string value)
-        {
-        }
-
-        // PUT api/values/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
-        {
-        }
-
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
+            return Json(names);
+        }      
     }
 }

@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using MongoDB.Driver;
 
 namespace CornAuth
 {
@@ -29,6 +30,10 @@ namespace CornAuth
         {
             // Add framework services.
             services.AddMvc();
+            services.AddCors();
+
+            // 將 MongoDB 新增為服務
+            services.AddSingleton(typeof(IMongoClient), new MongoClient("mongodb://mongo"));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
