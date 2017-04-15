@@ -5,6 +5,8 @@ services:
     image: mongo
   cornauth:
     image: cornauth
+    ports:
+      - "33000:80"
     build:
       context: ./CornAuth
       dockerfile: Dockerfile

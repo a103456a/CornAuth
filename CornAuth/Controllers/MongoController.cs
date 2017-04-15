@@ -17,7 +17,7 @@ namespace CornAuth.Controllers
         }                     
         [HttpGet("")]
         [HttpGet("databases")]
-        public async Task<IActionResult> Get()
+        public async Task<List<string>> Get()
         {
             var databases = await MongoDB.ListDatabasesAsync();
             var names = new List<string>();
@@ -27,7 +27,7 @@ namespace CornAuth.Controllers
                 names.AddRange(databases.Current.Select(document => document.GetElement("name").Value.AsString));
             }
 
-            return Json(names);
+            return names;
         }      
     }
 }
